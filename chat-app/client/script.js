@@ -3,13 +3,15 @@ const conversationList = document.getElementById('conversationList');
 const messages = document.getElementById('messages');
 const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
-
+const h3username = document.getElementById('h3username');
 let currentConversation = 'general';
-socket.messages = { general: [] };
+socket.messages = { general: [], private: {} };
 
 // Gestion de l'identification
 const username = prompt('Entrez votre nom :');
 socket.emit('login', username);
+const h3 = document.createElement('h3');
+h3username.textContent = username;
 
 // Mise à jour des conversations
 socket.on('user list', (users) => {
@@ -24,16 +26,26 @@ socket.on('user list', (users) => {
     });
 });
 
+socket.on('load messages', (data) => {
+    socket.messages.general = data.general || [];
+    Object.entries(data.private || {}).forEach(([user, msgs]) => {
+        socket.messages[user] = msgs;
+    });
+    updateMessages();
+});
+
 // Gestion des messages
 socket.on('general message', (msg) => {
     socket.messages.general.push(msg);
     if (currentConversation === 'general') updateMessages();
+    //saveMessages();
 });
 
 socket.on('private message', (msg) => {
     if (!socket.messages[msg.from]) socket.messages[msg.from] = [];
     socket.messages[msg.from].push(msg);
     if (currentConversation === msg.from || currentConversation === msg.to) updateMessages();
+    //saveMessages();
 });
 
 function updateMessages() {

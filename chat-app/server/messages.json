@@ -1,0 +1,82 @@
+{
+  "general": [
+    {
+      "from": "Alice",
+      "text": "Bonjour tout le monde !",
+      "timestamp": "2025-01-17T10:00:00.000Z"
+    },
+    {
+      "from": "Bob",
+      "text": "Salut Alice !",
+      "timestamp": "2025-01-17T10:01:00.000Z"
+    },
+    {
+      "text": "hello",
+      "timestamp": "2025-01-19T15:44:29.617Z"
+    },
+    {
+      "from": "lolo",
+      "text": "bonjour",
+      "timestamp": "2025-01-19T15:57:01.504Z"
+    },
+    {
+      "from": "skylord",
+      "text": "skylord",
+      "timestamp": "2025-01-19T15:57:21.071Z"
+    }
+  ],
+  "private": {
+    "Alice": [
+      {
+        "from": "Bob",
+        "to": "Alice",
+        "text": "Salut, ça va ?",
+        "timestamp": "2025-01-17T10:05:00.000Z"
+      },
+      {
+        "from": "skylord",
+        "to": "Alice",
+        "text": "bj tt le md",
+        "timestamp": "2025-01-19T13:23:27.944Z"
+      }
+    ],
+    "skylord": [
+      {
+        "from": "skylord",
+        "to": "Alice",
+        "text": "bj tt le md",
+        "timestamp": "2025-01-19T13:23:27.944Z"
+      },
+      {
+        "from": "lolo",
+        "to": "skylord",
+        "text": "hello",
+        "timestamp": "2025-01-19T15:57:32.033Z"
+      }
+    ],
+    "Alice la best des best": [
+      {
+        "from": "Skylord",
+        "to": "Alice la best des best",
+        "text": "hello",
+        "timestamp": "2025-01-19T13:55:58.905Z"
+      }
+    ],
+    "Skylord": [
+      {
+        "from": "Skylord",
+        "to": "Alice la best des best",
+        "text": "hello",
+        "timestamp": "2025-01-19T13:55:58.905Z"
+      }
+    ],
+    "lolo": [
+      {
+        "from": "lolo",
+        "to": "skylord",
+        "text": "hello",
+        "timestamp": "2025-01-19T15:57:32.033Z"
+      }
+    ]
+  }
+}

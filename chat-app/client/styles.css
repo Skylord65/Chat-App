@@ -26,6 +26,17 @@ body {
     background-color: #3a3f47;
 }
 
+#h3username {
+    width: 20%;
+    margin: 0;
+    flex: 1;
+    position:fixed;
+    bottom: 0;
+    padding: 1rex;
+    background-color: #3a3f47;
+    place-content: bottom;
+}
+
 #sidebar ul {
     list-style: none;
     margin: 0;
@@ -67,4 +78,3 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-

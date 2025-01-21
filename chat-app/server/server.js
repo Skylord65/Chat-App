@@ -3,6 +3,8 @@ const http = require('http');
 const { Server } = require('socket.io');
 const fs = require('fs');
 
+const path = 'messages.json';
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
@@ -15,6 +17,14 @@ let messages = {
     general: [],
     private: {} // { username: [ { from, to, text, timestamp } ] }
 };
+
+if (fs.existsSync(path)) {
+    messages = JSON.parse(fs.readFileSync(path, 'utf8'));
+}
+
+function saveMessages() {
+    fs.writeFileSync(path, JSON.stringify(messages, null, 2), 'utf8');
+}
 
 // Servir les fichiers statiques du client
 app.use(express.static('../client'));
@@ -29,7 +39,7 @@ io.on('connection', (socket) => {
         socket.username = username;
 
         // Charger l'historique de l'utilisateur
-        const userMessages = messages.private[username] || {};
+        const userMessages = messages.private[socket.username] || {};
         socket.emit('load messages', { general: messages.general, private: userMessages });
 
         // Envoyer la liste des utilisateurs connectés
@@ -40,6 +50,7 @@ io.on('connection', (socket) => {
     socket.on('general message', (text) => {
         const fullMessage = { from: socket.username, text, timestamp: new Date().toISOString() };
         messages.general.push(fullMessage);
+        saveMessages();
         io.emit('general message', fullMessage);
     });
 
@@ -50,10 +61,10 @@ io.on('connection', (socket) => {
         // Enregistrer le message
         if (!messages.private[to]) messages.private[to] = [];
         messages.private[to].push(fullMessage);
-
+        saveMessages();
         if (!messages.private[socket.username]) messages.private[socket.username] = [];
         messages.private[socket.username].push(fullMessage);
-
+        saveMessages();
         // Envoyer au destinataire et au sender
         io.to(users[to]).emit('private message', fullMessage);
         socket.emit('private message', fullMessage);
