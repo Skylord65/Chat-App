@@ -41,9 +41,12 @@ socket.on('general message', (msg) => {
     //saveMessages();
 });
 
+// Gestion des messages privés
 socket.on('private message', (msg) => {
     if (!socket.messages[msg.from]) socket.messages[msg.from] = [];
+    if (!socket.messages[msg.to]) socket.messages[msg.to] = [];
     socket.messages[msg.from].push(msg);
+    socket.messages[msg.to].push(msg);
     if (currentConversation === msg.from || currentConversation === msg.to) updateMessages();
     //saveMessages();
 });
@@ -65,10 +68,20 @@ messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const text = messageInput.value;
     if (text.trim() === '') return;
+    const msg = {
+        from: username,
+        to: currentConversation,
+        text,
+        timestamp: new Date().toISOString()
+    };
     if (currentConversation === 'general') {
         socket.emit('general message', text);
     } else {
         socket.emit('private message', { to: currentConversation, text });
+        // Add the message to the conversation immediately
+        if (!socket.messages[currentConversation]) socket.messages[currentConversation] = [];
+        socket.messages[currentConversation].push(msg);
+        updateMessages();
     }
     messageInput.value = '';
 });

@@ -39,12 +39,18 @@ io.on('connection', (socket) => {
         socket.username = username;
 
         // Charger l'historique de l'utilisateur
-        const userMessages = messages.private[socket.username] || {};
-        socket.emit('load messages', { general: messages.general, private: userMessages });
+        const userMessages = messages.private[socket.username] || [];
+        const privateMessages = Object.keys(messages.private).reduce((acc, user) => {
+            if (user === socket.username || messages.private[user].some(msg => msg.to === socket.username)) {
+                acc[user] = messages.private[user];
+            }
+            return acc;
+        }, {});
+        socket.emit('load messages', { general: messages.general, private: privateMessages });
 
         // Envoyer la liste des utilisateurs connectés
         io.emit('user list', Object.keys(users));
-    });
+});
 
     // Gestion des messages dans le chat général
     socket.on('general message', (text) => {
